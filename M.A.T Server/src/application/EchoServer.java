@@ -1,3 +1,4 @@
+package application;
 // This file contains material supporting section 3.7 of the textbook:
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
@@ -8,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import ocsf.server.*;
+
 
 /**
  * This class overrides some of the methods in the abstract 
@@ -86,7 +88,7 @@ public class EchoServer extends AbstractServer
    * @param args[0] The port number to listen on.  Defaults to 5555 
    *          if no argument is entered.
    */
-  public static void main(String[] args) 
+  public void setServerCon(String portStr)
   {
     int port = 0; //Port to listen on
     
@@ -97,7 +99,7 @@ public class EchoServer extends AbstractServer
     
     try 
     {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","12345");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mat","root","12345");
         System.out.println("SQL connection succeed");
     }catch (SQLException ex) 
 	    {/* handle any errors*/
@@ -108,7 +110,7 @@ public class EchoServer extends AbstractServer
 
     try
     {
-      port = Integer.parseInt(args[0]); //Get port from command line
+      port = Integer.parseInt(portStr); //Get port from command line
     }
     catch(Throwable t)
     {
@@ -119,7 +121,7 @@ public class EchoServer extends AbstractServer
     
     try 
     {
-      sv.listen(); //Start listening for connections
+    	sv.listen(); //Start listening for connections
     } 
     catch (Exception ex) 
     {

@@ -18,6 +18,8 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		EchoServer echoServer = new EchoServer(5555);
+		echoServer.setServerCon("5555");
 	}
 	
 	public static void main(String[] args) {
