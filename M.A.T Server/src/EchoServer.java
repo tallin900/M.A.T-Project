@@ -3,6 +3,10 @@
 // license found at www.lloseng.com 
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import ocsf.server.*;
 
 /**
@@ -85,6 +89,22 @@ public class EchoServer extends AbstractServer
   public static void main(String[] args) 
   {
     int port = 0; //Port to listen on
+    
+    try 
+	{
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+    } catch (Exception ex) {/* handle the error*/}
+    
+    try 
+    {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","12345");
+        System.out.println("SQL connection succeed");
+    }catch (SQLException ex) 
+	    {/* handle any errors*/
+        System.out.println("SQLException: " + ex.getMessage());
+        System.out.println("SQLState: " + ex.getSQLState());
+        System.out.println("VendorError: " + ex.getErrorCode());
+        }
 
     try
     {
