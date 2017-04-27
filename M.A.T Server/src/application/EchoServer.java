@@ -8,6 +8,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import ocsf.server.*;
 
 
@@ -29,6 +34,7 @@ public class EchoServer extends AbstractServer
    * The default port to listen on.
    */
   final public static int DEFAULT_PORT = 5555;
+  LogController logController;
   
   //Constructors ****************************************************
   
@@ -65,8 +71,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
-    System.out.println
-      ("Server listening for connections on port " + getPort());
+	  System.out.println("Server listening for connection on poer "+getPort());
   }
   
   /**
@@ -87,10 +92,25 @@ public class EchoServer extends AbstractServer
    *
    * @param args[0] The port number to listen on.  Defaults to 5555 
    *          if no argument is entered.
+ * @throws IOException 
    */
-  public void setServerCon(String portStr)
+  public void setServerCon(String user, String password, String portStr) throws IOException
   {
     int port = 0; //Port to listen on
+    
+    //open log events controller
+	Stage primaryStage = new Stage();
+	FXMLLoader loader = new FXMLLoader();
+	Pane root = loader.load(getClass().getResource("LogController.fxml").openStream());
+	
+	logController = loader.getController();
+	
+	Scene scene = new Scene(root);			
+	scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	
+	primaryStage.setScene(scene);		
+	primaryStage.show();
+    
     
     try 
 	{
@@ -99,8 +119,8 @@ public class EchoServer extends AbstractServer
     
     try 
     {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mat","root","12345");
-        System.out.println("SQL connection succeed");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mat",user,password);
+        logController.showMsg("SQL connection succeed");
     }catch (SQLException ex) 
 	    {/* handle any errors*/
         System.out.println("SQLException: " + ex.getMessage());
