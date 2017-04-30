@@ -19,7 +19,7 @@ public class LogController {
     }
     
     public void showMsg(String msg){
-    	logTxtArea.appendText(msg);
+    	logTxtArea.appendText(msg + "\n");
     }
 
 }

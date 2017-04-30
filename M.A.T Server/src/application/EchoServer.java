@@ -60,7 +60,7 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-	    System.out.println("Message received: " + msg + " from " + client);
+	  	logController.showMsg("Message received: " + msg + " from " + client);
 	    this.sendToAllClients(msg);
 	  }
 
@@ -71,7 +71,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
-	  System.out.println("Server listening for connection on poer "+getPort());
+	  logController.showMsg("Server listening for connection on port " + getPort());
   }
   
   /**
@@ -98,24 +98,29 @@ public class EchoServer extends AbstractServer
   {
     int port = 0; //Port to listen on
     
-    //open log events controller
-	Stage primaryStage = new Stage();
-	FXMLLoader loader = new FXMLLoader();
-	Pane root = loader.load(getClass().getResource("LogController.fxml").openStream());
-	
-	logController = loader.getController();
-	
-	Scene scene = new Scene(root);			
-	scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-	
-	primaryStage.setScene(scene);		
-	primaryStage.show();
-    
     
     try 
 	{
         Class.forName("com.mysql.jdbc.Driver").newInstance();
     } catch (Exception ex) {/* handle the error*/}
+    
+  //open log events controller
+  	try {
+  		Stage primaryStage = new Stage();
+  	  	FXMLLoader loader = new FXMLLoader();
+  	  	Pane root;
+  		root = loader.load(getClass().getResource("LogController.fxml").openStream());
+  	  	
+  	  	Scene scene = new Scene(root);			
+  	  	scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+  	  	
+  	  	logController = loader.getController();
+  	  	primaryStage.setScene(scene);	
+  	  	primaryStage.show();
+  	} catch (IOException e) {
+  		// TODO Auto-generated catch block
+  		e.printStackTrace();
+  	}
     
     try 
     {
@@ -136,16 +141,14 @@ public class EchoServer extends AbstractServer
     {
       port = DEFAULT_PORT; //Set port to 5555
     }
-	
-    EchoServer sv = new EchoServer(port);
     
     try 
     {
-    	sv.listen(); //Start listening for connections
+    	this.listen(); //Start listening for connections
     } 
     catch (Exception ex) 
     {
-      System.out.println("ERROR - Could not listen for clients!");
+      logController.showMsg("ERROR - Could not listen for clients!");
     }
   }
 }
