@@ -1,8 +1,11 @@
 package application;
 
+import java.text.SimpleDateFormat;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 public class LogController {
@@ -19,7 +22,9 @@ public class LogController {
     }
     
     public void showMsg(String msg){
-    	logTxtArea.appendText(msg + "\n");
+    	long currTime = System.currentTimeMillis();
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    	logTxtArea.appendText("[" + sdf.format(currTime) + "] " + msg + "\n");
     }
 
 }

@@ -8,12 +8,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import application.ClientMsg.QueryType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ocsf.server.*;
+import java.sql.*;
 
 
 /**
@@ -35,6 +38,7 @@ public class EchoServer extends AbstractServer
    */
   final public static int DEFAULT_PORT = 5555;
   LogController logController;
+  Connection DBConn;
   
   //Constructors ****************************************************
   
@@ -61,7 +65,29 @@ public class EchoServer extends AbstractServer
     (Object msg, ConnectionToClient client)
   {
 	  	logController.showMsg("Message received: " + msg + " from " + client);
-	    this.sendToAllClients(msg);
+	    if(msg instanceof ClientMsg){
+	    	ClientMsg clientMsg = (ClientMsg) msg;
+	    	Statement stmt;
+	    	if(clientMsg.getQueryType() == QueryType.SELECT){
+				try {
+					stmt = DBConn.createStatement();
+					ResultSet result = stmt.executeQuery(clientMsg.getQuery());
+					client.sendToClient(result);
+				} catch (Exception e) {
+					logController.showMsg("ERROR: server could not execute the query");
+					e.printStackTrace();
+				}
+	    	}else if(clientMsg.getQueryType() == QueryType.UPDATE){
+	    		try {
+		    		stmt = DBConn.createStatement();
+		    		int result = stmt.executeUpdate(clientMsg.getQuery());
+					client.sendToClient(result);
+				} catch (Exception e) {
+					logController.showMsg("ERROR: server could not execute the query");
+					e.printStackTrace();
+				}
+	    	}
+	    }
 	  }
 
     
@@ -80,7 +106,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStopped()
   {
-    System.out.println
+    logController.showMsg
       ("Server has stopped listening for connections.");
   }
   
@@ -104,9 +130,11 @@ public class EchoServer extends AbstractServer
         Class.forName("com.mysql.jdbc.Driver").newInstance();
     } catch (Exception ex) {/* handle the error*/}
     
-  //open log events controller
+    //open log events controller
   	try {
   		Stage primaryStage = new Stage();
+  		primaryStage.setTitle("EchoServer log system");
+  		primaryStage.getIcons().add(new Image("/server_earth.png"));
   	  	FXMLLoader loader = new FXMLLoader();
   	  	Pane root;
   		root = loader.load(getClass().getResource("LogController.fxml").openStream());
@@ -124,13 +152,13 @@ public class EchoServer extends AbstractServer
     
     try 
     {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mat",user,password);
+        DBConn = DriverManager.getConnection("jdbc:mysql://localhost/mat",user,password);
         logController.showMsg("SQL connection succeed");
     }catch (SQLException ex) 
 	    {/* handle any errors*/
-        System.out.println("SQLException: " + ex.getMessage());
-        System.out.println("SQLState: " + ex.getSQLState());
-        System.out.println("VendorError: " + ex.getErrorCode());
+        logController.showMsg("SQLException: " + ex.getMessage());
+        logController.showMsg("SQLState: " + ex.getSQLState());
+        logController.showMsg("VendorError: " + ex.getErrorCode());
         }
 
     try

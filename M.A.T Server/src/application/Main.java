@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 
 
 public class Main extends Application {
@@ -73,6 +74,7 @@ public class Main extends Application {
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setTitle("Log in to server");
+		primaryStage.getIcons().add(new Image("/server_earth.png"));
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();	
