@@ -7,6 +7,7 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import application.ClientMsg.QueryType;
 import javafx.fxml.FXMLLoader;
@@ -61,34 +62,39 @@ public class EchoServer extends AbstractServer
    * @param msg The message received from the client.
    * @param client The connection from which the message originated.
    */
-  public void handleMessageFromClient
-    (Object msg, ConnectionToClient client)
-  {
+  public void handleMessageFromClient(Object msg, ConnectionToClient client){
 	  	logController.showMsg("Message received: " + msg + " from " + client);
-	    if(msg instanceof ClientMsg){
-	    	ClientMsg clientMsg = (ClientMsg) msg;
-	    	Statement stmt;
-	    	if(clientMsg.getQueryType() == QueryType.SELECT){
-				try {
-					stmt = DBConn.createStatement();
-					ResultSet result = stmt.executeQuery(clientMsg.getQuery());
-					client.sendToClient(result);
-				} catch (Exception e) {
-					logController.showMsg("ERROR: server could not execute the query");
-					e.printStackTrace();
-				}
-	    	}else if(clientMsg.getQueryType() == QueryType.UPDATE){
-	    		try {
-		    		stmt = DBConn.createStatement();
-		    		int result = stmt.executeUpdate(clientMsg.getQuery());
-					client.sendToClient(result);
-				} catch (Exception e) {
-					logController.showMsg("ERROR: server could not execute the query");
-					e.printStackTrace();
-				}
-	    	}
-	    }
-	  }
+    	HashMap<String, String> clientMsg = (HashMap<String, String>) msg;
+    	if(clientMsg.get("msgType").equals("select")){
+			selectQuery(clientMsg, client);
+    	}else if(clientMsg.get("msgType").equals("update")){
+    		updateQuery(clientMsg, client);
+    	}
+  }
+  
+  private void selectQuery(HashMap<String, String> clientMsg, ConnectionToClient client){
+	  Statement stmt;
+	  try {
+			stmt = DBConn.createStatement();
+			ResultSet result = stmt.executeQuery(clientMsg.get("query"));
+			client.sendToClient(result);
+		} catch (Exception e) {
+			logController.showMsg("ERROR: server could not execute the query");
+			e.printStackTrace();
+		}
+  }
+  
+  private void updateQuery(HashMap<String, String> clientMsg, ConnectionToClient client){
+	  Statement stmt;
+	  try {
+  		stmt = DBConn.createStatement();
+  		int result = stmt.executeUpdate(clientMsg.get("query"));
+			client.sendToClient(result);
+		} catch (Exception e) {
+			logController.showMsg("ERROR: server could not execute the query");
+			e.printStackTrace();
+		}
+  }
 
     
   /**
