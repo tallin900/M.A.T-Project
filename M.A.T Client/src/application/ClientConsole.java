@@ -1,3 +1,5 @@
+package application;
+
 // This file contains material supporting section 3.7 of the textbook:
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
@@ -23,8 +25,9 @@ public class ClientConsole implements ChatIF
   /**
    * The default port to connect on.
    */
+  public Object message;
   final public static int DEFAULT_PORT = 5555;
-  
+  public volatile boolean answerFromServer;
   //Instance variables **********************************************
   
   /**
@@ -41,6 +44,9 @@ public class ClientConsole implements ChatIF
    * @param host The host to connect to.
    * @param port The port to connect on.
    */
+  
+
+  
   public ClientConsole(String host, int port) 
   {
     try 
@@ -62,25 +68,17 @@ public class ClientConsole implements ChatIF
    * This method waits for input from the console.  Once it is 
    * received, it sends it to the client's message handler.
    */
-  public void accept() 
+  public void accept(Object message) 
   {
-    try
-    {
-      BufferedReader fromConsole = 
-        new BufferedReader(new InputStreamReader(System.in));
-      String message;
-
-      while (true) 
-      {
-        message = fromConsole.readLine();
-        client.handleMessageFromClientUI(message);
-      }
-    } 
-    catch (Exception ex) 
-    {
-      System.out.println
-        ("Unexpected error while reading from console!");
-    }
+	  
+	  try{
+		  client.handleMessageFromClientUI(message);
+	  }
+	  catch(Exception ex)
+	  {
+		  System.out.println("error");
+	  }
+	  
   }
 
   /**
@@ -89,10 +87,25 @@ public class ClientConsole implements ChatIF
    *
    * @param message The string to be displayed.
    */
-  public void display(String message) 
+  public void SetMessage(Object message) 
   {
-    System.out.println("> " + message);
+	this.message=message;
+	setAnswerFromServer(true);
+    //System.out.println("> " + message);
   }
+
+
+public void setAnswerFromServer(boolean answer) {
+	// TODO Auto-generated method stub
+	this.answerFromServer=answer;
+}
+
+public boolean getAnswerFromServer()
+{
+	return this.answerFromServer;
+}
+
+
 
   
   //Class methods ***************************************************
@@ -102,21 +115,6 @@ public class ClientConsole implements ChatIF
    *
    * @param args[0] The host to connect to.
    */
-  public static void main(String[] args) 
-  {
-    String host = "";
-    int port = 0;  //The port number
 
-    try
-    {
-      host = args[0];
-    }
-    catch(ArrayIndexOutOfBoundsException e)
-    {
-      host = "localhost";
-    }
-    ClientConsole chat= new ClientConsole(host, DEFAULT_PORT);
-    chat.accept();  //Wait for console data
-  }
 }
 //End of ConsoleChat class

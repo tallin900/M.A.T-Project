@@ -7,6 +7,8 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,7 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ocsf.server.*;
-import java.sql.*;
+
 
 
 /**
@@ -61,8 +63,13 @@ public class EchoServer extends AbstractServer
    * @param client The connection from which the message originated.
    */
   public void handleMessageFromClient(Object msg, ConnectionToClient client){
-	  	logController.showMsg("Message received: " + msg + " from " + client);
-    	HashMap<String, String> clientMsg = (HashMap<String, String>) msg;
+	  
+	  
+	  HashMap<String, String> clientMsg = (HashMap<String, String>) msg;
+	  
+	  logController.showMsg("Message received: " + clientMsg.get("query") + " from " + client);
+
+	  		  	
     	if(clientMsg.get("msgType").equals("select")){
 			selectQuery(clientMsg, client);
     	}else if(clientMsg.get("msgType").equals("update")){
@@ -72,14 +79,36 @@ public class EchoServer extends AbstractServer
   
   private void selectQuery(HashMap<String, String> clientMsg, ConnectionToClient client){
 	  Statement stmt;
+	  
+	  ArrayList<String> arrayList = new ArrayList<String>();
+	  
 	  try {
 			stmt = DBConn.createStatement();
 			ResultSet result = stmt.executeQuery(clientMsg.get("query"));
-			client.sendToClient(result);
+
+			/*Counting the number of columns*/
+		    ResultSetMetaData rsMetaData = result.getMetaData();
+		    int numberOfColumns = rsMetaData.getColumnCount();
+			
+		    
+			    /*Converting resaultSet into arraylist*/
+				while (result.next()) {              
+				        int i = 1;
+				        while(i <= numberOfColumns) {
+				            arrayList.add(result.getString(i++));
+				        }
+				}
+		    
 		} catch (Exception e) {
 			logController.showMsg("ERROR: server could not execute the query");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
+	  try {		  
+		client.sendToClient(arrayList);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		System.out.println("\nCould not sent message to client.");
+	}
   }
   
   private void updateQuery(HashMap<String, String> clientMsg, ConnectionToClient client){

@@ -15,12 +15,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 
 
-public class Main extends Application {
+public class MainServer extends Application {
 	
 	@FXML // fx:id="userTxtFld"
-    private TextField userTxtFld; // Value injected by FXMLLoader
+	private TextField userTxtFld = new TextField(); // Value injected by FXMLLoader
 
     @FXML // fx:id="portTxtFld"
     private TextField portTxtFld; // Value injected by FXMLLoader
@@ -45,9 +46,12 @@ public class Main extends Application {
     @FXML
     void login(ActionEvent event) {
     	String userName, password, port;
+    	
+    	
     	userName = userTxtFld.getText();
     	password = pswrdTxtFld.getText();
     	port = portTxtFld.getText();
+    	 	
     	
     	if(userName.equals("root") && password.equals("12345") && port.equals("5555"))
 			try {
@@ -76,11 +80,15 @@ public class Main extends Application {
 		primaryStage.setTitle("Log in to server");
 		primaryStage.getIcons().add(new Image("/server_earth.png"));
 		primaryStage.setScene(scene);
+    	primaryStage.show();
+
+    	
+
 		
-		primaryStage.show();	
 	}
 	
 	public static void main(String[] args) {
 		launch(args);
+		
 	}
 }

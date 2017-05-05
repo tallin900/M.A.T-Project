@@ -56,7 +56,7 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-    clientUI.display(msg.toString());
+    clientUI.SetMessage(msg);
   }
 
   /**
@@ -64,7 +64,7 @@ public class ChatClient extends AbstractClient
    *
    * @param message The message from the UI.    
    */
-  public void handleMessageFromClientUI(String message)
+  public void handleMessageFromClientUI(Object message)
   {
     try
     {
@@ -72,7 +72,7 @@ public class ChatClient extends AbstractClient
     }
     catch(IOException e)
     {
-      clientUI.display
+      clientUI.SetMessage
         ("Could not send message to server.  Terminating client.");
       quit();
     }
