@@ -21,9 +21,10 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class MainGUIController extends MainClient {
+public class MainGUIController{
 	
 	
+	private ArrayList<String> msgList;
 	
     @FXML // fx:id="TeacherIDfield"
     private TextField TeacherIDfield; // Value injected by FXMLLoader
@@ -50,6 +51,9 @@ public class MainGUIController extends MainClient {
     @FXML // fx:id="infoPanel"
     private Pane infoPanel; // Value injected by FXMLLoader
     
+    @FXML
+    private Label WarningLabel;
+
     
     
     @FXML
@@ -71,6 +75,11 @@ public class MainGUIController extends MainClient {
   	  	
   	  	primaryStage.setScene(scene);	
   	  	primaryStage.show();
+  	  	
+  	  	EditTeacherController editTeacherController = (EditTeacherController)loader.getController();
+  	  	editTeacherController.setFields(msgList, this);
+  	  	
+  	  	
     }
 
     @FXML
@@ -82,29 +91,40 @@ public class MainGUIController extends MainClient {
     	queryHash.put("msgType","select");
     	queryHash.put("query","select * from teachers where ID='"+TeacherIDfield.getText()+"'");
     	
-    	
     	try{
-    	client.accept(queryHash);	//Senting the query to the server
+    	MainClient.client.SendMessageToServer(queryHash);	//Senting the query to the server
     	}
     	catch(Exception ex){
     		System.out.println("The client couldn't send the query");
     	}
     	
     	/*Creating thread which wait for the server response*/	
-    	MessageThread thread = new MessageThread(client,nameField);
+    	MessageThread thread = new MessageThread(MainClient.client);
     		
     	thread.start();
 		synchronized (thread) {
 			thread.wait(); //sending the thread to sleep untill message from server is received
 			/*Meassage from server received*/
-			ArrayList<String> arrayList = (ArrayList<String>)(client.message);	
-			nameField.setText((String) arrayList.get(0));
-			IDfield.setText((String) arrayList.get(1));
-			TUfield.setText((String) arrayList.get(2));
+			msgList = (ArrayList<String>) MainClient.client.getMessage();
+			if(!msgList.isEmpty()){
+				WarningLabel.setVisible(false);
+				nameField.setText((String) msgList.get(0));
+				IDfield.setText((String) msgList.get(1));
+				TUfield.setText((String) msgList.get(2));
+				infoPanel.setVisible(true);
+			}else{
+				WarningLabel.setVisible(true);
+				infoPanel.setVisible(false);
+			}
+
 		}
 
     }
 
+    public void updateInfo(String newTU)
+    {
+    	TUfield.setText(newTU);
+    }
 
 
 }

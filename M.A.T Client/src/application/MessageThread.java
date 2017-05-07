@@ -3,10 +3,10 @@ package application;
 import javafx.scene.control.Label;
 
 public class MessageThread extends Thread {
-	public ClientConsole client;
+	public ClientConnection client;
 
 	
-	public MessageThread(ClientConsole Client,Label nameField){
+	public MessageThread(ClientConnection Client){
 		this.client=Client;
 	}	
 	/*This thread is waiting until the client get a message from the server,

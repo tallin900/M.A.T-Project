@@ -53,20 +53,15 @@ public class MainServer extends Application {
     	port = portTxtFld.getText();
     	 	
     	
-    	if(userName.equals("root") && password.equals("12345") && port.equals("5555"))
-			try {
-				{
-					EchoServer echoServer = new EchoServer(Integer.parseInt(port));
-					echoServer.setServerCon(userName, password, port);
-					((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-				}
-			} catch (NumberFormatException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		else{
-    		errorMsgLbl.setText("Invalid input");
-    	}
+		try {			
+			EchoServer echoServer = new EchoServer(Integer.parseInt(port));
+			echoServer.setServerCon(userName, password, port);
+			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window		
+		} catch (NumberFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
     	
     }
    

@@ -5,6 +5,8 @@ package application;
 // license found at www.lloseng.com 
 
 import java.io.*;
+import java.util.ArrayList;
+
 import client.*;
 import common.*;
 
@@ -18,15 +20,21 @@ import common.*;
  * @author Dr Robert Lagani&egrave;re
  * @version July 2000
  */
-public class ClientConsole implements ChatIF 
+public class ClientConnection implements ChatIF 
 {
   //Class variables *************************************************
   
   /**
    * The default port to connect on.
    */
-  public Object message;
-  final public static int DEFAULT_PORT = 5555;
+  private Object message;
+  
+  
+  public Object getMessage() {
+	return message;
+}
+
+final public static int DEFAULT_PORT = 5555;
   public volatile boolean answerFromServer;
   //Instance variables **********************************************
   
@@ -47,7 +55,7 @@ public class ClientConsole implements ChatIF
   
 
   
-  public ClientConsole(String host, int port) 
+  public ClientConnection(String host, int port) 
   {
     try 
     {
@@ -68,7 +76,7 @@ public class ClientConsole implements ChatIF
    * This method waits for input from the console.  Once it is 
    * received, it sends it to the client's message handler.
    */
-  public void accept(Object message) 
+  public void SendMessageToServer(Object message) 
   {
 	  
 	  try{

@@ -85,10 +85,9 @@ public class EchoServer extends AbstractServer
 	  try {
 			stmt = DBConn.createStatement();
 			ResultSet result = stmt.executeQuery(clientMsg.get("query"));
-
+			
 			/*Counting the number of columns*/
-		    ResultSetMetaData rsMetaData = result.getMetaData();
-		    int numberOfColumns = rsMetaData.getColumnCount();
+		    int numberOfColumns = result.getMetaData().getColumnCount();
 			
 		    
 			    /*Converting resaultSet into arraylist*/
@@ -98,7 +97,6 @@ public class EchoServer extends AbstractServer
 				            arrayList.add(result.getString(i++));
 				        }
 				}
-		    
 		} catch (Exception e) {
 			logController.showMsg("ERROR: server could not execute the query");
 			//e.printStackTrace();
