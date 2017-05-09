@@ -1,4 +1,3 @@
-/application/
-/client/
-/common/
-/ocsf/
+/Controllers/
+/Boundaries/
+/Entities/
