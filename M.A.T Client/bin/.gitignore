@@ -1,7 +1,6 @@
 /Controllers/
-/Boundaries/
 /Entities/
 /application/
 /client/
 /common/
-/Communication/
+/ocsf/
