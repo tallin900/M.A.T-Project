@@ -1,13 +1,15 @@
+package Entities;
+
 public class qLanguage {
 
-	private string lId;
-	private string lText;
+	private String lId;
+	private String lText;
 
 	/**
 	 * 
 	 * @param lId
 	 */
-	public string getText(int lId) {
+	public String getText(int lId) {
 		// TODO - implement qLanguage.getText
 		throw new UnsupportedOperationException();
 	}

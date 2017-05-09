@@ -7,8 +7,7 @@ package application;
 import java.io.*;
 import java.util.ArrayList;
 
-import client.*;
-import common.*;
+import Communication.*;
 
 /**
  * This class constructs the UI for a chat client.  It implements the

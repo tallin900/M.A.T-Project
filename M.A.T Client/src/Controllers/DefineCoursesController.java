@@ -1,3 +1,5 @@
+package Controllers;
+
 public class DefineCoursesController extends MainController {
 
 	public boolean createNewCourse() {

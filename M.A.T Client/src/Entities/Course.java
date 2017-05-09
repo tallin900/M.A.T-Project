@@ -1,3 +1,5 @@
+package Entities;
+
 public class Course extends AcademicActivity {
 
 	private int courseID;

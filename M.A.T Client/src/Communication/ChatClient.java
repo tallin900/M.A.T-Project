@@ -2,10 +2,9 @@
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
-package client;
+package Communication;
 
 import ocsf.client.*;
-import common.*;
 import java.io.*;
 
 /**
