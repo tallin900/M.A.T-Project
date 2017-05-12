@@ -3,13 +3,12 @@ package application;
 import java.io.IOException;
 import java.util.Scanner;
 
-import com.sun.prism.Image;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
 
 public class MainClient extends Application {
@@ -19,11 +18,9 @@ public class MainClient extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		Scanner reader = new Scanner(System.in);
-		Parent root = FXMLLoader.load(getClass().getResource("MainGUI.fxml"));
 		String IP;
 		int Port;
-		
+		Scanner reader = new Scanner(System.in);
 		
 		System.out.println("Welcome!\nInsert Server IP: ");
 		IP=reader.nextLine();
@@ -32,10 +29,11 @@ public class MainClient extends Application {
 		client = new ClientConnection(IP, Port);
 		
 		
+		Parent root = FXMLLoader.load(getClass().getResource("MainGUI.fxml"));
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setTitle("ProtoType");
-		//primaryStage.getIcons().add(new Image("/server_earth.png"));
+		primaryStage.getIcons().add(new Image("/school_icon.png"));
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		client.setAnswerFromServer(false);

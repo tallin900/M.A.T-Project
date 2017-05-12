@@ -65,12 +65,13 @@ public class MainGUIController{
     void editTeacher(ActionEvent event) throws IOException {
     	Stage primaryStage = new Stage();
   		primaryStage.setTitle("Edit teaching unit");
+  		primaryStage.getIcons().add(new Image("/school_icon.png"));
   		//primaryStage.getIcons().add(new Image("/server_earth.png"));
   	  	FXMLLoader loader = new FXMLLoader();
   	  	Pane root;
   		root = loader.load(getClass().getResource("EditTeacher.fxml").openStream());
   	  	
-  	  	Scene scene = new Scene(root);			
+  	  	Scene scene = new Scene(root);
   	  	scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
   	  	
   	  	primaryStage.setScene(scene);	

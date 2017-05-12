@@ -68,7 +68,7 @@ public class MainServer extends AbstractServer
   	HashMap<String, String> clientMsg = (HashMap<String, String>) msg;
   
   	// shows the received msg to the event log
-  	logController.showMsg("Message received: " + clientMsg.get("query") + " from " + client);
+  	logController.showMsg("Message received: " + clientMsg.get("msgType") + " from " + client);
 
   
   	//check the msg type
