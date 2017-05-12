@@ -75,7 +75,7 @@ final public static int DEFAULT_PORT = 5555;
    * This method waits for input from the console.  Once it is 
    * received, it sends it to the client's message handler.
    */
-  public void SendMessageToServer(Object message) 
+  public void sendMessageToServer(Object message) 
   {
 	  
 	  try{
@@ -94,23 +94,22 @@ final public static int DEFAULT_PORT = 5555;
    *
    * @param message The string to be displayed.
    */
-  public void SetMessage(Object message) 
+  public void setMessage(Object message) 
   {
-	this.message=message;
-	setAnswerFromServer(true);
-    //System.out.println("> " + message);
+	  this.message=message;
+	  setAnswerFromServer(true);
+	    
   }
 
 
-public void setAnswerFromServer(boolean answer) {
-	// TODO Auto-generated method stub
-	this.answerFromServer=answer;
-}
+  public void setAnswerFromServer(boolean answer) {
+	  // TODO Auto-generated method stub
+	  this.answerFromServer=answer;
+  }
 
-public boolean getAnswerFromServer()
-{
-	return this.answerFromServer;
-}
+  public boolean getAnswerFromServer(){
+	  return this.answerFromServer;
+  }
 
 
 

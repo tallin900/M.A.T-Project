@@ -19,5 +19,5 @@ public interface ChatIF
    * a UI.
    */
 	
-  public abstract void SetMessage(Object message);
+  public abstract void setMessage(Object message);
 }

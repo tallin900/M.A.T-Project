@@ -92,13 +92,14 @@ public class MainGUIController{
     	queryHash.put("query","select * from teachers where ID='"+TeacherIDfield.getText()+"'");
     	
     	try{
-    	MainClient.client.SendMessageToServer(queryHash);	//Senting the query to the server
+    		MainClient.client.sendMessageToServer(queryHash);	//Sending the query to the server
     	}
     	catch(Exception ex){
     		System.out.println("The client couldn't send the query");
     	}
     	
-    	/*Creating thread which wait for the server response*/	
+    	
+    	//Creating thread which wait for the server response	
     	MessageThread thread = new MessageThread(MainClient.client);
     	
     	thread.start();
@@ -106,7 +107,7 @@ public class MainGUIController{
     	
     	synchronized (thread) {
 			thread.wait(); //sending the thread to sleep untill message from server is received
-			/*Meassage from server received*/
+			//Meassage from server received
 			msgList = (ArrayList<String>) MainClient.client.getMessage();
 			if(!msgList.isEmpty()){
 				WarningLabel.setVisible(false);

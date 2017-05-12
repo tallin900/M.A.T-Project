@@ -49,7 +49,7 @@ public class EditTeacherController{
     	/*Creating the query for server*/
     	queryHash.put("msgType","update");
     	queryHash.put("query","update teachers set Teaching_Unit='"+TU+"' where ID='" + teacherID.getText() +"';");
-    	MainClient.client.SendMessageToServer(queryHash);
+    	MainClient.client.sendMessageToServer(queryHash);
     	
     	/*Creating thread which wait for the server response*/	
     	MessageThread thread = new MessageThread(MainClient.client);

@@ -79,6 +79,37 @@ public class MainServer extends AbstractServer
 	}
   }
   
+  private void login(HashMap<String, String> clientMsg, ConnectionToClient client) {
+	String id, passwrd;
+	int school;
+	Statement stmt;
+	HashMap<String, Integer> serverMsg = new HashMap<String, Integer>();
+	id = clientMsg.get("id");
+	passwrd = clientMsg.get("passwrd");
+	school = Integer.parseInt(clientMsg.get("schoolId"));
+	if(school == 1){
+		String query = "select passwrd, type from users where ID='" + id + "'";
+		try {
+			stmt = DBConn.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			if(result.next()){
+				if(passwrd.equals(result.getString(1))){
+					serverMsg.put("valid", 1);
+					serverMsg.put("type", Integer.parseInt(result.getString(2)));
+				}else{
+					serverMsg.put("valid", 0);
+				}
+			}else{
+				serverMsg.put("valid", 0);
+			}
+			client.sendToClient(serverMsg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
+  
   private void selectQuery(HashMap<String, String> clientMsg, ConnectionToClient client){
 	  Statement stmt;
 	  
