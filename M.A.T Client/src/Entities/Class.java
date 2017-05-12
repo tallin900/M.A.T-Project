@@ -2,7 +2,7 @@ package Entities;
 
 public class Class {
 
-	private Taken[] course;
+	private Course[] course;
 	private Student[] students;
 
 }

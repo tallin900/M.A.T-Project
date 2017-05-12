@@ -1,5 +1,7 @@
 package Controllers;
 
+import Entities.NewStudenCoursePlacement;
+
 public class ChangeStudentAssignmentController extends MainController {
 
 	/**

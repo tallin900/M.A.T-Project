@@ -30,7 +30,7 @@ import ocsf.server.*;
  * @author Paul Holden
  * @version July 2000
  */
-public class EchoServer extends AbstractServer 
+public class MainServer extends AbstractServer 
 {
   //Class variables *************************************************
   
@@ -48,7 +48,7 @@ public class EchoServer extends AbstractServer
    *
    * @param port The port number to connect on.
    */
-  public EchoServer(int port) 
+  public MainServer(int port) 
   {
     super(port);
   }
@@ -65,23 +65,26 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient(Object msg, ConnectionToClient client){
 	  
 	  
-	  HashMap<String, String> clientMsg = (HashMap<String, String>) msg;
-	  
-	  logController.showMsg("Message received: " + clientMsg.get("query") + " from " + client);
+  	HashMap<String, String> clientMsg = (HashMap<String, String>) msg;
+  
+  	// shows the received msg to the event log
+  	logController.showMsg("Message received: " + clientMsg.get("query") + " from " + client);
 
-	  		  	
-    	if(clientMsg.get("msgType").equals("select")){
-			selectQuery(clientMsg, client);
-    	}else if(clientMsg.get("msgType").equals("update")){
-    		updateQuery(clientMsg, client);
-    	}
+  
+  	//check the msg type
+	if(clientMsg.get("msgType").equals("select")){
+		selectQuery(clientMsg, client);
+	}else if(clientMsg.get("msgType").equals("update")){
+		updateQuery(clientMsg, client);
+	}
   }
   
   private void selectQuery(HashMap<String, String> clientMsg, ConnectionToClient client){
 	  Statement stmt;
 	  
 	  ArrayList<String> arrayList = new ArrayList<String>();
-	  
+	 
+	  //execute the query and translate the result to array list
 	  try {
 			stmt = DBConn.createStatement();
 			ResultSet result = stmt.executeQuery(clientMsg.get("query"));
@@ -101,16 +104,19 @@ public class EchoServer extends AbstractServer
 			logController.showMsg("ERROR: server could not execute the query");
 			//e.printStackTrace();
 		}
+	  
+	  // return the result to client
 	  try {		  
-		client.sendToClient(arrayList);
-	} catch (IOException e) {
+		  client.sendToClient(arrayList);
+	  } catch (IOException e) {
 		// TODO Auto-generated catch block
-		System.out.println("\nCould not sent message to client.");
-	}
+		  System.out.println("\nCould not sent message to client.");
+	  }
   }
   
   private void updateQuery(HashMap<String, String> clientMsg, ConnectionToClient client){
 	  Statement stmt;
+	  //execute the query and return the number of effected rows to client
 	  try {
   		stmt = DBConn.createStatement();
   		int result = stmt.executeUpdate(clientMsg.get("query"));
@@ -153,34 +159,16 @@ public class EchoServer extends AbstractServer
    */
   public void setServerCon(String user, String password, String portStr) throws IOException
   {
-    int port = 0; //Port to listen on
-    
+    //open log events controller
+  	openLogEventGUI();
     
     try 
 	{
         Class.forName("com.mysql.jdbc.Driver").newInstance();
     } catch (Exception ex) {/* handle the error*/}
-    
-    //open log events controller
-  	try {
-  		Stage primaryStage = new Stage();
-  		primaryStage.setTitle("EchoServer log system");
-  		primaryStage.getIcons().add(new Image("/server_earth.png"));
-  	  	FXMLLoader loader = new FXMLLoader();
-  	  	Pane root;
-  		root = loader.load(getClass().getResource("LogController.fxml").openStream());
-  	  	
-  	  	Scene scene = new Scene(root);			
-  	  	scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-  	  	
-  	  	logController = loader.getController();
-  	  	primaryStage.setScene(scene);	
-  	  	primaryStage.show();
-  	} catch (IOException e) {
-  		// TODO Auto-generated catch block
-  		e.printStackTrace();
-  	}
-    
+ 
+  	
+  	//connect to DB
     try 
     {
         DBConn = DriverManager.getConnection("jdbc:mysql://localhost/mat",user,password);
@@ -194,11 +182,9 @@ public class EchoServer extends AbstractServer
 
     try
     {
-      port = Integer.parseInt(portStr); //Get port from command line
     }
     catch(Throwable t)
     {
-      port = DEFAULT_PORT; //Set port to 5555
     }
     
     try 
@@ -210,5 +196,28 @@ public class EchoServer extends AbstractServer
       logController.showMsg("ERROR - Could not listen for clients!");
     }
   }
+  
+  private void openLogEventGUI(){
+	//open log events controller
+	  	try {
+	  		Stage primaryStage = new Stage();
+	  		primaryStage.setTitle("EchoServer log system");
+	  		primaryStage.getIcons().add(new Image("/server_earth.png"));
+	  	  	FXMLLoader loader = new FXMLLoader();
+	  	  	Pane root;
+	  		root = loader.load(getClass().getResource("LogController.fxml").openStream());
+	  	  	
+	  	  	Scene scene = new Scene(root);			
+	  	  	scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	  	  	
+	  	  	logController = loader.getController();
+	  	  	primaryStage.setScene(scene);	
+	  	  	primaryStage.show();
+	  	} catch (IOException e) {
+	  		// TODO Auto-generated catch block
+	  		e.printStackTrace();
+	  	}
+  }
+  
 }
 //End of EchoServer class

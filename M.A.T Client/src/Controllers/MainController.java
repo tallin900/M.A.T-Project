@@ -1,7 +1,9 @@
 package Controllers;
 
+import application.MessageThread;
+
 public class MainController {
 
-	private msgT MessageThread;
+	private MessageThread msgT;
 
 }

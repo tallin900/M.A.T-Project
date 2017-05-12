@@ -9,12 +9,12 @@ public class PersonalFile {
 		throw new UnsupportedOperationException();
 	}
 
-	public void() viewEvaluationForm() {
+	public void viewEvaluationForm() {
 		// TODO - implement PersonalFile.viewEvaluationForm
 		throw new UnsupportedOperationException();
 	}
 
-	public void() viewSubmittedAssignmentt() {
+	public void viewSubmittedAssignmentt() {
 		// TODO - implement PersonalFile.viewSubmittedAssignmentt
 		throw new UnsupportedOperationException();
 	}

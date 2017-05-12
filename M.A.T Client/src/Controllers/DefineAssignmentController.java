@@ -1,5 +1,7 @@
 package Controllers;
 
+import Entities.DefinedAssignment;
+
 public class DefineAssignmentController extends MainController {
 
 	/**

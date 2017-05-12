@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 
-public class MainServer extends Application {
+public class MainServerGUI extends Application {
 	
 	@FXML // fx:id="userTxtFld"
 	private TextField userTxtFld = new TextField(); // Value injected by FXMLLoader
@@ -54,8 +54,8 @@ public class MainServer extends Application {
     	 	
     	
 		try {			
-			EchoServer echoServer = new EchoServer(Integer.parseInt(port));
-			echoServer.setServerCon(userName, password, port);
+			MainServer mainServer = new MainServer(Integer.parseInt(port));
+			mainServer.setServerCon(userName, password, port);
 			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window		
 		} catch (NumberFormatException | IOException e) {
 			// TODO Auto-generated catch block

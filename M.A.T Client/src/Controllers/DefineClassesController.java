@@ -1,5 +1,7 @@
 package Controllers;
 
+import Entities.Student;
+
 public class DefineClassesController extends MainController {
 
 	/**

@@ -1,5 +1,9 @@
 package Controllers;
 
+import java.util.Date;
+
+import Entities.Semester;
+
 public class CreateNewSemesterController extends MainController {
 
 	/**
@@ -7,7 +11,7 @@ public class CreateNewSemesterController extends MainController {
 	 * @param date
 	 * @param name
 	 */
-	public Semester CreateNewSem(date date, String name) {
+	public Semester CreateNewSem(Date date, String name) {
 		// TODO - implement CreateNewSemesterController.CreateNewSem
 		throw new UnsupportedOperationException();
 	}
