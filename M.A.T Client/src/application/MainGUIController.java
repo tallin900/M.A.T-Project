@@ -100,9 +100,11 @@ public class MainGUIController{
     	
     	/*Creating thread which wait for the server response*/	
     	MessageThread thread = new MessageThread(MainClient.client);
-    		
+    	
     	thread.start();
-		synchronized (thread) {
+		
+    	
+    	synchronized (thread) {
 			thread.wait(); //sending the thread to sleep untill message from server is received
 			/*Meassage from server received*/
 			msgList = (ArrayList<String>) MainClient.client.getMessage();
