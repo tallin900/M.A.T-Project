@@ -76,38 +76,46 @@ public class MainServer extends AbstractServer
 		selectQuery(clientMsg, client);
 	}else if(clientMsg.get("msgType").equals("update")){
 		updateQuery(clientMsg, client);
+	}else if(clientMsg.get("msgType").equals("Login")){
+		login(clientMsg,client);
 	}
   }
   
   private void login(HashMap<String, String> clientMsg, ConnectionToClient client) {
-	String id, passwrd;
-	int school;
+	String id, password,school;
 	Statement stmt;
-	HashMap<String, Integer> serverMsg = new HashMap<String, Integer>();
+	HashMap<String, String> serverMsg = new HashMap<String, String>();
+	
+	
 	id = clientMsg.get("id");
-	passwrd = clientMsg.get("passwrd");
-	school = Integer.parseInt(clientMsg.get("schoolId"));
-	if(school == 1){
-		String query = "select passwrd, type from users where ID='" + id + "'";
+	password = clientMsg.get("passwrd");
+	school = clientMsg.get(clientMsg.get("schoolId"));
+	
+	
+	
+		String query = "use "+school+ ";" + "select Name,Password,Type from users where ID='" + id + "' AND Password='"+password+"';";
+		
 		try {
 			stmt = DBConn.createStatement();
 			ResultSet result = stmt.executeQuery(query);
 			if(result.next()){
-				if(passwrd.equals(result.getString(1))){
-					serverMsg.put("valid", 1);
-					serverMsg.put("type", Integer.parseInt(result.getString(2)));
+				if(password.equals(result.getString(2))){
+					serverMsg.put("Valid", "true");
+					serverMsg.put("Type", result.getString(3));
+					serverMsg.put("Name", result.getString(1));
 				}else{
-					serverMsg.put("valid", 0);
+					serverMsg.put("Valid", "false");
+					serverMsg.put("ErrMsg", "Password is incorrect.");
 				}
 			}else{
-				serverMsg.put("valid", 0);
+				serverMsg.put("Valid", "false");
+				serverMsg.put("ErrMsg", "User does not exist.");
 			}
 			client.sendToClient(serverMsg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 }
   
   private void selectQuery(HashMap<String, String> clientMsg, ConnectionToClient client){

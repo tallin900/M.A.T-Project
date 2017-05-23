@@ -105,7 +105,7 @@ public class MainGUIController{
     	
     	thread.start();
 		
-    	
+
     	synchronized (thread) {
 			thread.wait(); //sending the thread to sleep untill message from server is received
 			//Meassage from server received
